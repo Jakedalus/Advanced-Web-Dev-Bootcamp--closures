@@ -18,6 +18,19 @@ function specialMultiply(a,b){
     }
 }
 
+function specialMultiply2(a,b){
+    if (arguments.length == 1) {
+      return function(b) {
+        return a * b;
+      }
+    } 
+    return a * b;
+}
+
+console.log(specialMultiply2(3,4)); // 12
+console.log(specialMultiply2(3)(4)); // 12
+console.log(specialMultiply2(3)); // function(){}....
+
 /* 
 Write a function called guessingGame which takes in one parameter amount. The function should return another function that takes in a parameter called guess. In the outer function, you should create a variable called answer which is the result of a random number between 0 and 10 as well as a variable called guesses which should be set to 0.
 
@@ -42,16 +55,17 @@ Examples (yours might not be like this, since the answer is random every time):
 */
 
 function guessingGame(amount){
-    var answer = Math.floor(Math.random() * Math.floor(10));
+    var answer = Math.floor(Math.random() * Math.floor(11));
     var guesses = 0;
     var won = false;
+  
     return function(guess) {
         
-        console.log(guess, answer, guesses, amount, won);
+//        console.log(guess, answer, guesses, amount, won);
         if (guesses !== amount) {
             guesses++;
             if (guess === answer) {
-                console.log("You got it!");
+//                console.log("You got it!");
                 won = true;
                 guesses = amount;
                 return "You got it!";
@@ -67,4 +81,50 @@ function guessingGame(amount){
         
     }
 }
+
+function guessingGame2(amount){
+    var answer = Math.floor(Math.random()*11);
+    var guesses = 0;
+    var completed = false;
+  
+    return function(guess) {
+        
+        console.log(guess, answer, guesses, amount, completed);
+        if (!completed) {
+            guesses++;
+            if (guess === answer) {
+                completed = true;
+                return "You got it!";
+            } else if (guess > answer) {
+                return "You're too high!";
+            } else if (guess < answer) {
+                return "You're too low!"
+            } else if (guesses === amount) {
+                completed = true;
+                return "No more guesses the answer was " + answer;
+            }
+        } 
+      
+        return "You are all done playing!";
+        
+        
+    }
+}
+
+console.log("Game 1");
+var game = guessingGame2(5)
+console.log(game(1)); // "You're too low!"
+console.log(game(8)); // "You're too high!"
+console.log(game(5)); // "You're too low!"
+console.log(game(7)); // "You got it!"
+console.log(game(1)); // "You are all done playing!"
+
+console.log("==============");
+console.log("Game 2");
+var game2 = guessingGame2(3)
+console.log(game2(5)); // "You're too low!"
+console.log(game2(3)); // "You're too low!"
+console.log(game2(10)); // "No more guesses the answer was 0"
+console.log(game2(1)); // "You are all done playing!"
+console.log(game2(1)); // "You are all done playing!"
 
